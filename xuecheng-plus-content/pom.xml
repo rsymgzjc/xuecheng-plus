@@ -18,5 +18,13 @@
         <module>xuecheng-plus-content-model</module>
         <module>xuecheng-plus-content-service</module>
     </modules>
+    <dependencies>
+        <!-- Spring Boot 集成 Junit -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
+    </dependencies>
 </project>
