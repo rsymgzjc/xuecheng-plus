@@ -1,5 +1,5 @@
 ###课程查询列表
-POST {{content_host}}/content/course/list?pageNo=1&pageSize=2
+POST {{gateway_host}}/content/course/list?pageNo=1&pageSize=2
 Content-Type: application/json
 
 {
@@ -9,38 +9,35 @@ Content-Type: application/json
 }
 
 ###课程分类查询
-GET {{content_host}}/content/course-category/tree-nodes
+GET {{gateway_host}}/content/course-category/tree-nodes
 
 ### 根据课程id查询课程信息
-GET {{content_host}}/content/course/40
+GET {{gateway_host}}/content/course/40
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzMSJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE2NjQzMzM0OTgsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjhhM2M2OTk1LWU1ZGEtNDQ1Yy05ZDAyLTEwNDFlYzk3NTkwOSIsImNsaWVudF9pZCI6ImMxIn0.73eNDxTX5ifttGCjwc7xrd-Sbp_mCfcIerI3lGetZto
+
+### 创建课程
+POST {{content_host}}/content/course
 Content-Type: application/json
-#响应结果
-#{
-#  "id": 40,
-#  "companyId": 1232141425,
-#  "companyName": null,
-#  "name": "SpringBoot核心",
-#  "users": "Spring Boot初学者",
-#  "tags": "Spring项目的快速构建",
-#  "mt": "1-3",
-#  "mtName": null,
-#  "st": "1-3-2",
-#  "stName": null,
-#  "grade": "200003",
-#  "teachmode": "201001",
-#  "description": "课程系统性地深度探讨 Spring Boot 核心特性，引导小伙伴对 Java 规范的重视，启发对技术原理性的思考，掌握排查问题的技能，以及学习阅读源码的方法和技巧，全面提升研发能力，进军架构师队伍。",
-#  "pic": "https://cdn.educba.com/academy/wp-content/uploads/2018/08/Spring-BOOT-Interview-questions.jpg",
-#  "createDate": "2019-09-10 16:05:39",
-#  "changeDate": "2022-09-09 07:27:48",
-#  "createPeople": null,
-#  "changePeople": null,
-#  "auditStatus": "202004",
-#  "status": "203001",
-#  "coursePubId": 21,
-#  "coursePubDate": null,
-#  "charge": "201001",
-#  "price": 0.01
-#}
+
+{
+  "charge": "201000",
+  "price": 0,
+  "originalPrice":0,
+  "qq": "22333",
+  "wechat": "223344",
+  "phone": "13333333",
+  "validDays": 365,
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "测试课程103",
+  "pic": "fefeffe",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "efefefe",
+  "grade": "204001",
+  "description": "fefefefefefefefefe"
+}
+
 
 ### 修改课程
 PUT {{content_host}}/content/course
@@ -106,6 +103,89 @@ Content-Type: application/json
   "status" : null,
   "teachPlanId" : 240
 }
+
+### 上传文件
+POST {{media_host}}/media/upload/coursefile
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="filedata"; filename="1.jpg"
+Content-Type: application/octet-stream
+
+< d:/develop/upload/1.jpg
+
+### 课程计划绑定视频
+POST {{media_host}}/media/teachplan/association/media
+Content-Type: application/json
+
+{
+  "mediaId": "",
+  "fileName": "",
+  "teachplanId": ""
+}
+
+### 课程发布
+POST {{content_host}}/content/coursepublish/2
+
+### 添加课程索引
+POST {{search_host}}/search/index/course
+Content-Type: application/json
+
+{
+  "charge" : "201000",
+  "companyId" : 100000,
+  "companyName" : "北京黑马程序员",
+  "createDate" : "2022-09-25 09:36:11",
+  "description" : "《Java编程思想》是2007年6月1日机械工业出版社出版的图书，作者是埃克尔，译者是陈昊鹏。主要内容本书赢得了全球程序员的广泛赞誉，即使是最晦涩的概念，在Bruce Eckel的文字亲和力和小而直接的编程示例面前也会化解于无形。从Java的基础语法到最高级特性（深入的面向对象概念、多线程、自动项目构建、单元测试和调试等），本书都能逐步指导你轻松掌握。从本书获得的各项大奖以及来自世界各地的读者评论中，不难看出这是一本经典之作",
+  "grade" : "204001",
+  "id" : 102,
+  "mt" : "1-3",
+  "mtName" : "编程开发",
+  "name" : "Java编程思想",
+  "originalPrice" : 200.0,
+  "pic" : "/mediafiles/2022/09/20/1d0f0e6ed8a0c4a89bfd304b84599d9c.png",
+  "price" : 100.0,
+  "remark" : "没有备注",
+  "st" : "1-3-2",
+  "stName" : "Java语言",
+  "status" : "203002",
+  "tags" : "没有标签",
+  "teachmode" : "200002",
+  "validDays" : 222
+}
+
+
+### 授权码模式
+### 第一步申请授权码(浏览器请求)/oauth/authorize?client_id=c1&response_type=code&scope=all&redirect_uri=http://www.51xuecheng.cn
+### 第二步申请令牌
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=CTvCrB&redirect_uri=http://www.51xuecheng.cn
+
+### 密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+
+### 密码模式
+POST {{auth_host}}/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
+###校验jwt令牌
+POST {{auth_host}}/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsicmVzMSJdLCJ1c2VyX25hbWUiOiJzdHUxIiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTY2NDM3MTc4MCwiYXV0aG9yaXRpZXMiOlsicDEiXSwianRpIjoiZjBhM2NkZWItMzk5ZC00OGYwLTg4MDQtZWNhNjM4YWQ4ODU3IiwiY2xpZW50X2lkIjoiYzEifQ.qy46CSCJsH3eXWTHgdcntZhzcSzfRQlBU0dxAjZcsUw
+
+
+################扩展认证请求参数后######################
+###密码模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username={"username":"stu1","authType":"password","password":"111111"}
+
+### 申请验证码
+POST {{checkcode_host}}/checkcode/pic
+### 校验验证码
+POST {{checkcode_host}}/checkcode/verify?key=checkcode4506b95bddbe46cdb0d56810b747db1b&code=70dl
+
+### 查询课程发布信息
+GET {{content_host}}/content/r/coursepublish/2
+
+### 添加选课
+POST {{learning_host}}/learning/choosecourse/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ7XCJiaXJ0aGRheVwiOlwiMjAyMi0wOS0yOFQxOToyODo0NlwiLFwiY3JlYXRlVGltZVwiOlwiMjAyMi0wOS0yOFQwODozMjowM1wiLFwiaWRcIjpcIjUwXCIsXCJuYW1lXCI6XCLlrabnlJ8xXCIsXCJuaWNrbmFtZVwiOlwi5aSn5rC054mbXCIsXCJwZXJtaXNzaW9uc1wiOltcInhjX3N5c21hbmFnZXJcIixcInhjX3N5c21hbmFnZXJfdXNlclwiLFwieGNfc3lzbWFuYWdlcl91c2VyX2FkZFwiLFwieGNfc3lzbWFuYWdlcl91c2VyX2VkaXRcIixcInhjX3N5c21hbmFnZXJfdXNlcl92aWV3XCIsXCJ4Y19zeXNtYW5hZ2VyX3VzZXJfZGVsZXRlXCIsXCJ4Y19zeXNtYW5hZ2VyX2RvY1wiLFwieGNfc3lzbWFuYWdlcl9sb2dcIixcInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VcIixcInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfYWRkXCIsXCJ4Y190ZWFjaG1hbmFnZXJfY291cnNlX2Jhc2VcIixcInhjX3N5c21hbmFnZXJfY29tcGFueVwiLFwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9saXN0XCJdLFwic2V4XCI6XCIxXCIsXCJzdGF0dXNcIjpcIjFcIixcInVzZXJuYW1lXCI6XCJzdHUxXCIsXCJ1c2VycGljXCI6XCJodHRwOi8vZmlsZS54dWVjaGVuZy1wbHVzLmNvbS9kZGRmXCIsXCJ1dHlwZVwiOlwiMTAxMDAxXCJ9Iiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTY2NzI5OTQwNiwiYXV0aG9yaXRpZXMiOlsieGNfc3lzbWFuYWdlcl9kb2MiLCJ4Y19zeXNtYW5hZ2VyX3VzZXJfdmlldyIsInhjX3RlYWNobWFuYWdlcl9jb3Vyc2UiLCJ4Y19zeXNtYW5hZ2VyX3VzZXJfYWRkIiwieGNfc3lzbWFuYWdlcl9jb21wYW55IiwieGNfc3lzbWFuYWdlcl91c2VyX2RlbGV0ZSIsInhjX3N5c21hbmFnZXJfdXNlciIsInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfYmFzZSIsInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfbGlzdCIsInhjX3N5c21hbmFnZXIiLCJ4Y19zeXNtYW5hZ2VyX2xvZyIsInhjX3N5c21hbmFnZXJfdXNlcl9lZGl0IiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9hZGQiXSwianRpIjoiOTYyOTYzMWQtYjRiMC00NTlkLTgzYzktM2Q4MmRiNmI4NDEzIiwiY2xpZW50X2lkIjoiWGNXZWJBcHAifQ.b77ZreiNlPoN-_dnAWxuBfH32tPIoRwg2ePgKn_aZ8c
+
+
 
 
 

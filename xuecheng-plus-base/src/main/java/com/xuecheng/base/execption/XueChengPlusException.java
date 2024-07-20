@@ -1,8 +1,11 @@
 package com.xuecheng.base.execption;
 
+import lombok.Getter;
+
 /**
  * 异常类
  */
+@Getter
 public class XueChengPlusException extends RuntimeException{
     private String errMessage;
 
@@ -11,10 +14,6 @@ public class XueChengPlusException extends RuntimeException{
     public XueChengPlusException(String errMessage) {
         super(errMessage);
         this.errMessage = errMessage;
-    }
-
-    public String getErrMessage() {
-        return errMessage;
     }
 
     public static void cast(CommonError commonError){
