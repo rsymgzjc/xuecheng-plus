@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: system-service
+  cloud:
+    nacos:
+      server-addr: 192.168.101.65:8848
+      discovery:
+        namespace: dev_ori
+        group: xuecheng-plus-project
+      config:
+        namespace: dev_ori
+        group: xuecheng-plus-project
+        file-extension: yaml
+        refresh-enabled: true
+
+  #profiles默认为dev
+  profiles:
+    active: dev
+
+
+
